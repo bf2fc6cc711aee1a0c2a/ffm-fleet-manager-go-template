@@ -1,0 +1,1 @@
+# Fleet Manager Golang template
