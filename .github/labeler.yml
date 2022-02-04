@@ -1,0 +1,11 @@
+common:
+  - pkg/**/*
+  - test/**/*
+  - openapi/templates/**/*
+  - scripts/**/*
+dinosaur:
+  - internal/dinosaur/**/*
+  - openapi/fleet*
+  - cmd/fleet*
+github:
+  - .github/**/*
