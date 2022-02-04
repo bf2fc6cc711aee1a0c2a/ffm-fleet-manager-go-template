@@ -1,0 +1,6 @@
+[allowlist]
+  description = "Allowlist"
+  files = [
+    '''getting-credentials-and-accounts\.md$''',
+  ]
+
