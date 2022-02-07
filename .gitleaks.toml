@@ -2,5 +2,6 @@
   description = "Allowlist"
   files = [
     '''getting-credentials-and-accounts\.md$''',
+    '''test/support/jwt_private_key\.pem$''',
   ]
 
