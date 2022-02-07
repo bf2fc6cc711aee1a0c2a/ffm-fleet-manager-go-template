@@ -1,20 +1,44 @@
 # Contributing
 
-## Definition of Done
-* All acceptance criteria specified in JIRA are met
-    * Acceptance criteria to include:
-        * Required feature functionality
-        * Required tests - unit, integration, manual testcases (if relevant)
-        * Required documentation
-        * Required metrics, monitoring dashboards and alerts
-        * Required Standard Operating Procedures (SOPs)
-* CI and all relevant tests are passing
-* Changes have been verified by one additional reviewer against:
-    * each required environment
-    * each supported upgrade path
-* If the changes could have an impact on the clients (either UI or CLI), a JIRA should be created for making the required changes on the client side and acknowledged by one of the client side team members.    
-* PR has been merged
+## Templates update
 
+Every team using the template has shared responsibility and code access to this repository.
+The template will be collectively contributed and versioned.
+
+When a bug fix or a feature change is done on the Go template, a pull request on the Java version 
+(preferred) or an issue will be opened to make sure we keep both versions at the same feature and 
+maturity level.
+
+There is an agreement from each fleet-manager team to update their fleet-manager code on the newest 
+template regularly. Code updates to/from the template onto/from a specific service are expected to be 
+done manually since the two repositories are different. You are free to choose/rely on whichever 
+automation tool you have at your disposal e.g the combination of [git patch](https://git-scm.com/docs/git-format-patch) 
+and [git apply](https://git-scm.com/docs/git-apply) etc. Code fix is done on a roll forward fashion.
+
+### Notifying others about updates
+
+#### From service specific code to template
+
+In case of updates that are coming from a service specific fleet manager to the template, open an issue
+in [ffm project](https://github.com/bf2fc6cc711aee1a0c2a/ffm-project/issues) stating if it is a bug 
+fix/enhancement/ version updates etc.  It is advisable to open PR once there is concensus on the adoption of 
+the enhancement. To speed up the decision time, you can start a [zulip thread](https://bf2.zulipchat.com/) or 
+[google group thread](https://groups.google.com/g/factorized-fleet-manager) engaging the interested parties 
+asking if they would like to adopt the proposal. Additionally, it is okay to open a draft PR, to drive the conversation
+and enrich the understanding of the proposal.
+
+#### From template to specific fleet managers
+
+Once a fix / enhancement has landed to the template, an email should be sent to [factorised fleet manager google group](https://groups.google.com/g/factorized-fleet-manager). Likewise, the notification has to be sent to [zulip chat](https://bf2.zulipchat.com/).
+
+>NOTE: A preferred approach/ process is to update the templates and service specific fleet managers regularly. 
+This will make the rather "manual" update process less painful to work with by avoiding huge drifts which are likely to 
+cause a painful big-bang update.
+
+## Definition of Done
+* Changes have been verified by one additional reviewer
+* An equivalent Github Pull Request or an issue has been opened on the Quarkus based template   
+* PR has been merged and announcement sent
 
 ## Project Source
 Fork fleet-manager to your own Github repository: https://github.com/bf2fc6cc711aee1a0c2a/fleet-manager/fork
