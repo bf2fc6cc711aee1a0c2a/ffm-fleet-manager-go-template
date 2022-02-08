@@ -37,7 +37,10 @@ To bootstrap your application, after cloning the repository.
    ```
 
 ## Run for the first time
-Please make sure you have followed all of the prerequisites above first and the [populating configuration guide](docs/populating-configuration.md).
+Please make sure you have followed all of the prerequisites above first.  
+The [populating configuration guide](docs/populating-configuration.md) can be of use on how to populate certain configurations.
+
+
 
 1. Compile the binary
 ```
