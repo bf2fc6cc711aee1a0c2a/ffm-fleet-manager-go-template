@@ -212,7 +212,7 @@ help:
 	@echo "make image/push                  push docker image"
 	@echo "make setup/git/hooks             setup git hooks"
 	@echo "make keycloak/setup              setup mas sso clientId, clientSecret & crt"
-	@echo "make dinosaurcert/setup          setup the dinosaur certificate used for Dinosaur Brokers"
+	@echo "make dinosaurcert/setup          setup the dinosaur TLS certificate used for Managed Dinosaur Service"
 	@echo "make observatorium/setup         setup observatorium secrets used by CI"
 	@echo "make observatorium/token-refresher/setup" setup a local observatorium token refresher
 	@echo "make docker/login/internal       login to an openshift cluster image registry"

@@ -31,49 +31,69 @@ The [implementation](./docs/implementation.md) talks about the main components o
 To bootstrap your application, after cloning the repository. 
 
 1. Replace _dinosaurs_ placeholder with your own business entity / objects
-2. Implement code that have TODO comments
+1. Implement code that have TODO comments
    ```go
    // TODO
    ```
 
-## Run for the first time
-Please make sure you have followed all of the prerequisites above first and the [populating configuration guide](docs/populating-configuration.md).
+## Running Fleet Manager for the first time in your local environment
+Please make sure you have followed all of the prerequisites above first.  
 
-1. Compile the binary
+1. Follow the [populating configuration guide](docs/populating-configuration.md)
+   to prepare Fleet Manager with its needed configurations
+
+1. Compile the Fleet Manager binary
 ```
 make binary
 ```
-2. Clean up and Creating the database
-    - Create database tables
+1. Create and setup the Fleet Manager database
+    - Create and setup the database container and the initial database schemas
     ```
     make db/setup && make db/migrate
     ```
     - Optional - Verify tables and records are created
     ```
+    # Login to the database to get a SQL prompt
     make db/login
     ```
     ```
     # List all the tables
     serviceapitests# \dt
-    
+    ```
+    ```
+    # Verify that the `migrations` table contains multiple records
+    serviceapitests# select * from migrations;
     ```
 
-3. Start the service
+1. Start the Fleet Manager service in your local environment
     ```
     ./fleet-manager serve
     ```
+
+    This will start the Fleet Manager server and it will expose its API on
+    port 8000 by default
+
     >**NOTE**: The service has numerous feature flags which can be used to enable/disable certain features 
     of the service. Please see the [feature flag](./docs/feature-flags.md) documentation for more information.
-4. Verify the local service is working
+1. Verify the local service is working
     ```
     curl -H "Authorization: Bearer $(ocm token)" http://localhost:8000/api/dinosaurs_mgmt/v1/dinosaurs
    {"kind":"DinosaurRequestList","page":1,"size":0,"total":0,"items":[]}
     ```
    >NOTE: Change _dinosaur_ to your own rest resource
 
-## Using the Service
+   >NOTE: Make sure you are logged in to OCM through the CLI before running
+          this command. Details on that can be found [here](./docs/populating-configuration.md#interacting-with-the-fleet-manager-api)
 
-### View the API docs
+## Using the Fleet Manager service
+
+### Interacting with Fleet Manager's API
+
+See the [Interacting with the Fleet Manager API](docs/populating-configuration.md#interacting-with-the-fleet-manager-api)
+subsection in the [Populating Configuration](docs/populating-configuration.md)
+documentation
+
+### Viewing the API docs
 
 ```
 # Start Swagger UI container
@@ -84,33 +104,44 @@ make run/docs
 # Remove Swagger UI conainer
 make run/docs/teardown
 ```
-## Additional CLI commands
 
-In addition to the REST API exposed via `make run`, there are additional commands to interact directly
-with the service (i.e. cluster creation/scaling, Dinosaur creation, Errors list, etc.) without having to use a 
+### Running additional CLI commands
+
+In addition to starting and running a Fleet Manager server, the Fleet Manager
+binary provides additional commands to interact with the service (i.e. cluster
+creation/scaling, Dinosaur creation, Errors list, etc.) without having to use a
 REST API client.
 
-To use these commands, run `make binary` to create the `./fleet-manager` CLI.
+To use these commands, run `make binary` to create the `./fleet-manager` binary.
 
-Run `./fleet-manager -h` for information on the additional commands.
+Then run `./fleet-manager -h` for information on the additional available
+commands.
 
-## Environments
+### Fleet Manager Environments
 
-The service can be run in a number of different environments. Environments are essentially bespoke
-sets of configuration that the service uses to make it function differently. Environments can be
-set using the `OCM_ENV` environment variable. Below are the list of known environments and their
+The service can be run in a number of different environments. Environments are
+essentially bespoke sets of configuration that the service uses to make it
+function differently. Environments can be set using the `OCM_ENV` environment
+variable. Below are the list of known environments and their
 details.
 
-- `development` - The `staging` OCM environment is used. Sentry is disabled. Debugging utilities
-   are enabled. This should be used in local development.
-- `testing` - The OCM API is mocked/stubbed out, meaning network calls to OCM will fail. The auth
-   service is mocked. This should be used for unit testing.
-- `integration` - Identical to `testing` but using an emulated OCM API server to respond to OCM API
-   calls, instead of a basic mock. This can be used for integration testing to mock OCM behaviour.
-- `production` - Debugging utilities are disabled, Sentry is enabled. environment can be ignored in
-   most development and is only used when the service is deployed.
+- `development` - The `staging` OCM environment is used. Sentry is disabled.
+   Debugging utilities are enabled. This should be used in local development.
+   This is the default environment used when directly running the Fleet
+   Manager binary and the `OCM_ENV` variable has not been set.
+- `testing` - The OCM API is mocked/stubbed out, meaning network calls to OCM
+   will fail. The auth service is mocked. This should be used for unit testing.
+- `integration` - Identical to `testing` but using an emulated OCM API server
+   to respond to OCM API calls, instead of a basic mock. This can be used for
+   integration testing to mock OCM behaviour.
+- `production` - Debugging utilities are disabled, Sentry is enabled.
+   environment can be ignored in most development and is only used when
+   the service is deployed.
 
-## Additional docs
+The `OCM_ENV` environment variable should be set before running any Fleet
+Manager binary command or Makefile target
+
+## Additional documentation
 - [Adding new endpoint](docs/adding-a-new-endpoint.md)
 - [Adding new CLI flag](docs/adding-new-flags.md)
 - [Automated testing](docs/automated-testing.md)
@@ -123,4 +154,5 @@ details.
 - [Explanation of JWT token claims used across the fleet-manager](docs/jwt-claims.md)
 
 ## Contributing
-See the [contributing guide](CONTRIBUTING.md) for general guidelines on how to contribute back to the template.
+See the [contributing guide](CONTRIBUTING.md) for general guidelines on how to
+contribute back to the template.
