@@ -31,50 +31,52 @@ The [implementation](./docs/implementation.md) talks about the main components o
 To bootstrap your application, after cloning the repository. 
 
 1. Replace _dinosaurs_ placeholder with your own business entity / objects
-2. Implement code that have TODO comments
+1. Implement code that have TODO comments
    ```go
    // TODO
    ```
 
-## Run for the first time
+## Running Fleet Manager for the first time in your local environment
 Please make sure you have followed all of the prerequisites above first.  
 The [populating configuration guide](docs/populating-configuration.md) can be of use on how to populate certain configurations.
 
-
-
-1. Compile the binary
+1. Compile the Fleet Manager binary
 ```
 make binary
 ```
-2. Clean up and Creating the database
-    - Create database tables
+1. Create and setup the Fleet Manager database
+    - Create and setup the database container and the initial database schemas
     ```
     make db/setup && make db/migrate
     ```
     - Optional - Verify tables and records are created
     ```
+    # Login to the database to get a SQL prompt
     make db/login
     ```
     ```
     # List all the tables
     serviceapitests# \dt
-    
+    ```
+    ```
+    # Verify that the `migrations` table contains multiple records
+    serviceapitests# select * from migrations;
     ```
 
-3. Start the service
+1. Start the Fleet Manager service in your local environment
     ```
     ./fleet-manager serve
     ```
     >**NOTE**: The service has numerous feature flags which can be used to enable/disable certain features 
     of the service. Please see the [feature flag](./docs/feature-flags.md) documentation for more information.
-4. Verify the local service is working
+1. Verify the local service is working
     ```
     curl -H "Authorization: Bearer $(ocm token)" http://localhost:8000/api/dinosaurs_mgmt/v1/dinosaurs
    {"kind":"DinosaurRequestList","page":1,"size":0,"total":0,"items":[]}
     ```
    >NOTE: Change _dinosaur_ to your own rest resource
 
-## Using the Service
+## Using the Fleet Manager service
 
 ### View the API docs
 
@@ -89,11 +91,12 @@ make run/docs/teardown
 ```
 ## Additional CLI commands
 
-In addition to the REST API exposed via `make run`, there are additional commands to interact directly
-with the service (i.e. cluster creation/scaling, Dinosaur creation, Errors list, etc.) without having to use a 
-REST API client.
+In addition to starting and running a Fleet Manager server, the Fleet Manager
+binary provides additional commands to interact with the service (i.e. cluster
+creation/scaling, Dinosaur creation, Errors list, etc.) without having to use a
+REST API client.)
 
-To use these commands, run `make binary` to create the `./fleet-manager` CLI.
+To use these commands, run `make binary` to create the `./fleet-manager` binary.
 
 Run `./fleet-manager -h` for information on the additional commands.
 
@@ -112,6 +115,9 @@ details.
    calls, instead of a basic mock. This can be used for integration testing to mock OCM behaviour.
 - `production` - Debugging utilities are disabled, Sentry is enabled. environment can be ignored in
    most development and is only used when the service is deployed.
+
+The `OCM_ENV` environment variable should be set before running any Fleet
+Manager binary command or Makefile target
 
 ## Additional docs
 - [Adding new endpoint](docs/adding-a-new-endpoint.md)
