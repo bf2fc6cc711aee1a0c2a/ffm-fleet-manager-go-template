@@ -67,6 +67,10 @@ make binary
     ```
     ./fleet-manager serve
     ```
+
+    This will start the Fleet Manager server and it will expose its API on
+    port 8000 by default
+
     >**NOTE**: The service has numerous feature flags which can be used to enable/disable certain features 
     of the service. Please see the [feature flag](./docs/feature-flags.md) documentation for more information.
 1. Verify the local service is working
@@ -75,6 +79,9 @@ make binary
    {"kind":"DinosaurRequestList","page":1,"size":0,"total":0,"items":[]}
     ```
    >NOTE: Change _dinosaur_ to your own rest resource
+
+   >NOTE: Make sure you are logged in to OCM through the CLI before running
+          this command. Details on that can be found [here](./docs/populating-configuration.md#interacting-with-the-fleet-manager-api)
 
 ## Using the Fleet Manager service
 
