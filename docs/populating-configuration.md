@@ -206,3 +206,18 @@ make dinosaurcert/setup
 
 Additionally, make sure that the functionality is enabled by setting the
 `--enable-dinosaur-external-certificate` Fleet Manager binary CLI flag
+
+## Configure Sentry logging
+Fleet Manager can be configured to send its logs to the
+[Sentry](https://sentry.io/) logging service.
+
+In order for the Fleet Manager to be able to start, create the following files:
+```
+touch secrets/sentry.key
+```
+
+If you want to use Sentry set the Sentry Secret key in the `secrets/sentry.key`
+previously created.
+
+Additionally, make sure to set the Sentry URL endpoint and Sentry project when
+starting the Fleet Manager server. See [Sentry-related CLI flags in Fleet Manager](./feature-flags.md#sentry)
