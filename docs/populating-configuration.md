@@ -80,8 +80,26 @@ make keycloak/setup
 >NOTE: MAS-SSO is soon going to be deprecated. Reach out to the MAS-Security team for info regarding this.
 Alternatively, you could run your own Keycloak instance by following their [getting-started guide](https://www.keycloak.org/getting-started/getting-started-docker). Please note, how to setup Keycloak is out of scope of this guide
 
-## Setup the image pull secret
-To be able to pull docker images from quay, copy the content of your account's secret (`config.json` key) and paste it to `secrets/image-pull.dockerconfigjson` file.
+## Setup the data plane image pull secret
+In the Data Plane cluster, the Dinosaur Operator and the FleetShard Deployments
+might reference container images that are located in authenticated container
+image registries.
+
+Fleet Manager can be configured to send this authenticated
+container image registry information as a K8s Secret in [`kubernetes.io/.dockerconfigjson` format](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials).
+
+In order for the Fleet Manager to be able to start, create the following file:
+```
+touch secrets/image-pull.dockerconfigjson
+```
+
+If you don't need to make use of this functionality you can skip this section.
+Otherwise, keep reading below.
+
+To configure the Fleet Manager with this authenticated registry information so
+the previously mentioned Data Plane elements can pull container images from it:
+* Base-64 encode your [Docker configuration file](https://docs.docker.com/engine/reference/commandline/cli/#docker-cli-configuration-file-configjson-properties).
+* Copy the contents generated from the previous point into the `secrets/image-pull.dockerconfigjson` file
 
 ## Setup the Observability stack secrets
 See [Obsevability](./observability/README.md) to learn more about Observatorium and the observability stack.
