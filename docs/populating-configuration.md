@@ -91,8 +91,34 @@ The following command is used to setup the various secrets needed by the Observa
 make observatorium/setup
 ```
 
-## Setup Dinosaur Service TLS
-Setup the dinosaur TLS certificate used for Managed Dinosaur Service
+## Setup a custom TLS certificate for Dinosaur Host URLs
+
+When Fleet Manager creates Dinosaur instances, it can be configured to
+send a custom TLS certificate to associate to each one of the Dinosaur instances
+host URLs. That custom TLS certificate is sent to the data plane clusters where
+those instances are located.
+
+In order for the Fleet Manager to be able to start, create the following files:
 ```
+touch secrets/dinosaur-tls.crt
+touch secrets/dinosaur-tls.key
+```
+
+If you need to setup a custom TLS certificate for the Dinosaur instances' host
+URLs keep reading. Otherwise, this section can be skipped.
+
+To configure Fleet Manager so it sends the custom TLS certificate, provide the
+certificate and its corresponding key to the Fleet Manager by running the
+following command:
+```
+DINOSAUR_TLS_CERT=<dinosaur-tls-cert> \
+DINOSAUR_TLS_KEY=<dinosaur-tls-key> \
 make dinosaurcert/setup
 ```
+> NOTE: The certificate domain/s should match the URL endpoint domain if you
+  want the certificate to be valid when accessing the endpoint
+> NOTE: The expected Certificate and Key values are in PEM format, preserving
+  the newlines
+
+Additionally, make sure that the functionality is enabled by setting the
+`--enable-dinosaur-external-certificate` Fleet Manager binary CLI flag
