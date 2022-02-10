@@ -66,10 +66,42 @@ to test things out.
 >NOTE: You could pass dummy values to make sure that the secrets files are created.
 
 ## Setup AWS configuration
-This is used to initialise the aws accounts for cluster creation via OCM and also to setup AWS route53 account.
+Fleet Manager interacts with AWS to provide the following functionalities:
+* To be able to create and manage Data Plane clusters in a specific AWS account
+  by passing the needed credentials to OpenShift Cluster Management
+* To create [AWS's Route53](https://aws.amazon.com/route53/) DNS records in a
+  specific AWS account. This records are DNS records that point to some
+  routes related to Dinosaurs instances that are created.
+  > NOTE: The domain name used for this records can be configured by setting
+    the domain name to be used for Dinosaur instances. This cane be done
+    through the `--dinosaur-domain-name` Fleet Manager binary CLI flag
+For both functionalities, the same underlying AWS account is used.
+
+In order for the Fleet Manager to be able to start, create the following files:
 ```
+touch secrets/aws.accountid
+touch secrets/aws.accesskey
+touch secrets/aws.secretaccesskey
+touch secrets/aws.route53accesskey
+touch secrets/aws.route53secretaccesskey
+```
+
+If you need any of those functionalities keep reading. Otherwise, this section
+can be skipped.
+
+To accomplish the previously mentioned functionalities Fleet Manager needs to
+be configured to interact with the AWS account. To do so, provide existing AWS
+IAM user credentials to the control plane by running:
+```
+AWS_ACCOUNT_ID=<aws-account-id> \
+AWS_ACCESS_KEY=<aws-iam-user-access-key> \
+AWS_SECRET_ACCESS_KEY=<aws-iam-user-secret-access-key> \
+ROUTE53_ACCESS_KEY=<aws-iam-user-for-route-53-access-key> \
+ROUTE53_SECRET_ACCESS_KEY=<aws-iam-user-for-route-53-secret-access-key> \
 make aws/setup
 ```
+> NOTE: If you are in Red Hat, the following [documentation](./getting-credentials-and-accounts.md#aws)
+  might be useful to get the IAM user/s credentials
 
 ## Setup additional SSO configuration
 A different SSO server other than the default authentication server (Red Hat SSO)
