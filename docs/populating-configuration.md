@@ -71,14 +71,48 @@ This is used to initialise the aws accounts for cluster creation via OCM and als
 make aws/setup
 ```
 
-## Setup SSO configuration
-mas sso is used to create a Keycloak client used for communication between the fleetshard operator and the fleet manager.
-Additionally, it is used to configure the OpenShift cluster identity provider to give SRE an access to the cluster.
+## Setup additional SSO configuration
+A different SSO server other than the default authentication server (Red Hat SSO)
+is needed in Fleet Manager to enable some functionalities:
+* To enable communication between the Fleetshard operator (in the data plane) and the Fleet Manager
+* To configure the OpenShift cluster identity provider in Data Plane clusters
+  to give SRE access to them
+
+This additional SSO server must be based on Keycloak.
+
+In order for the Fleet Manager to be able to start, create the following files:
 ```
-make keycloak/setup
+touch secrets/keycloak-service.clientId
+touch secrets/keycloak-service.clientSecret
+touch secrets/osd-idp-keycloak-service.clientId
+touch secrets/osd-idp-keycloak-service.clientSecret
 ```
->NOTE: MAS-SSO is soon going to be deprecated. Reach out to the MAS-Security team for info regarding this.
-Alternatively, you could run your own Keycloak instance by following their [getting-started guide](https://www.keycloak.org/getting-started/getting-started-docker). Please note, how to setup Keycloak is out of scope of this guide
+
+If you need any of those functionalities keep reading. Otherwise, this section
+can be skipped.
+
+Two alternatives are offered here to use as the SSO Keycloak server:
+* Use MAS-SSO
+  >NOTE: MAS-SSO is soon going to be deprecated. Reach out to the MAS-Security team for info regarding this.
+* Run your own Keycloak server instance by following their [getting-started guide](https://www.keycloak.org/getting-started/getting-started-docker). Please note, how to setup Keycloak is out of scope of this guide
+
+To accomplish the previously mentioned functionalities Fleet Manager needs to
+be configured to interact with this additional SSO server.
+
+Create/Have available two client-id/client-secret pair of credentials (called Keycloak Clients)
+in the SSO Keycloak server, one for each previously mentioned functionality, and
+then set Fleet Manager to use them by running the following command:
+```
+ SSO_CLIENT_ID="<sso-client-id>" \
+ SSO_CLIENT_SECRET="<sso-client-secret>" \
+ OSD_IDP_SSO_CLIENT_ID="<osd-idp-sso-client-id>" \
+ OSD_IDP_SSO_CLIENT_SECRET="<osd-idp-sso-client-secret" \
+ make keycloak/setup
+```
+
+Additionally, make sure you start the Fleet Manager server with the appropriate
+Keycloak SSO Realms and URL for this. See the
+[Fleet Manager CLI feature flags](./feature-flags.md#keycloak) for details on it.
 
 ## Setup the image pull secret
 To be able to pull docker images from quay, copy the content of your account's secret (`config.json` key) and paste it to `secrets/image-pull.dockerconfigjson` file.
