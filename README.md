@@ -38,7 +38,9 @@ To bootstrap your application, after cloning the repository.
 
 ## Running Fleet Manager for the first time in your local environment
 Please make sure you have followed all of the prerequisites above first.  
-The [populating configuration guide](docs/populating-configuration.md) can be of use on how to populate certain configurations.
+
+1. Follow the [populating configuration guide](docs/populating-configuration.md)
+   to prepare Fleet Manager with its needed configurations
 
 1. Compile the Fleet Manager binary
 ```
@@ -85,7 +87,13 @@ make binary
 
 ## Using the Fleet Manager service
 
-### View the API docs
+### Interacting with Fleet Manager's API
+
+See the [Interacting with the Fleet Manager API](docs/populating-configuration.md#interacting-with-the-fleet-manager-api)
+subsection in the [Populating Configuration](docs/populating-configuration.md)
+documentation
+
+### Viewing the API docs
 
 ```
 # Start Swagger UI container
@@ -96,37 +104,44 @@ make run/docs
 # Remove Swagger UI conainer
 make run/docs/teardown
 ```
-## Additional CLI commands
+
+### Running additional CLI commands
 
 In addition to starting and running a Fleet Manager server, the Fleet Manager
 binary provides additional commands to interact with the service (i.e. cluster
 creation/scaling, Dinosaur creation, Errors list, etc.) without having to use a
-REST API client.)
+REST API client.
 
 To use these commands, run `make binary` to create the `./fleet-manager` binary.
 
-Run `./fleet-manager -h` for information on the additional commands.
+Then run `./fleet-manager -h` for information on the additional available
+commands.
 
-## Environments
+### Fleet Manager Environments
 
-The service can be run in a number of different environments. Environments are essentially bespoke
-sets of configuration that the service uses to make it function differently. Environments can be
-set using the `OCM_ENV` environment variable. Below are the list of known environments and their
+The service can be run in a number of different environments. Environments are
+essentially bespoke sets of configuration that the service uses to make it
+function differently. Environments can be set using the `OCM_ENV` environment
+variable. Below are the list of known environments and their
 details.
 
-- `development` - The `staging` OCM environment is used. Sentry is disabled. Debugging utilities
-   are enabled. This should be used in local development.
-- `testing` - The OCM API is mocked/stubbed out, meaning network calls to OCM will fail. The auth
-   service is mocked. This should be used for unit testing.
-- `integration` - Identical to `testing` but using an emulated OCM API server to respond to OCM API
-   calls, instead of a basic mock. This can be used for integration testing to mock OCM behaviour.
-- `production` - Debugging utilities are disabled, Sentry is enabled. environment can be ignored in
-   most development and is only used when the service is deployed.
+- `development` - The `staging` OCM environment is used. Sentry is disabled.
+   Debugging utilities are enabled. This should be used in local development.
+   This is the default environment used when directly running the Fleet
+   Manager binary and the `OCM_ENV` variable has not been set.
+- `testing` - The OCM API is mocked/stubbed out, meaning network calls to OCM
+   will fail. The auth service is mocked. This should be used for unit testing.
+- `integration` - Identical to `testing` but using an emulated OCM API server
+   to respond to OCM API calls, instead of a basic mock. This can be used for
+   integration testing to mock OCM behaviour.
+- `production` - Debugging utilities are disabled, Sentry is enabled.
+   environment can be ignored in most development and is only used when
+   the service is deployed.
 
 The `OCM_ENV` environment variable should be set before running any Fleet
 Manager binary command or Makefile target
 
-## Additional docs
+## Additional documentation
 - [Adding new endpoint](docs/adding-a-new-endpoint.md)
 - [Adding new CLI flag](docs/adding-new-flags.md)
 - [Automated testing](docs/automated-testing.md)
@@ -139,4 +154,5 @@ Manager binary command or Makefile target
 - [Explanation of JWT token claims used across the fleet-manager](docs/jwt-claims.md)
 
 ## Contributing
-See the [contributing guide](CONTRIBUTING.md) for general guidelines on how to contribute back to the template.
+See the [contributing guide](CONTRIBUTING.md) for general guidelines on how to
+contribute back to the template.
