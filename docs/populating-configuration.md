@@ -1,13 +1,11 @@
-> NOTE some step in this document might refers to Red Hat internal components that you do not have access to
+> NOTE some step in this document might refer to Red Hat internal components
+  that you do not have access to
 
 # Populating Configuration
+The document describes how to prepare Fleet Manager to be able to start by
+populating its configurations.
 
-# Populating Required Configuration
-
-1. Take note of your organization's `external_id` (your Red Hat Account's Organization ID). One way to retrieve
-your organization's `external_id` is by logging in to OpenShift Cluster Manager (OCM) using its CLI tool: Log in (see https://github.com openshift-online/ocm-cli#log-in) and then run the `ocm whoami` command and take note of the `.organization.external_id` attribute
-2. Add your organization's `external_id` (your Red Hat Account's Organization ID) to the [Quota Management List Configurations](quota-management-list-configuration.md) if you need to create STANDARD dinosaur instances. Follow the guide in [Quota Management List Configurations](access-control.md).
-3. Follow the guide in [Access Control Configurations](access-control.md) to configure access control as required.
+Follow all subsections to get a bootable Fleet Manager server.
 
 ## Interacting with the Fleet Manager API
 
@@ -55,15 +53,36 @@ Manager by running:
 make ocm/setup OCM_OFFLINE_TOKEN=<your-retrieved-ocm-offline-token>
 ```
 
-# Populating Optional Configuration
-The subsections below describe how to setup some advanced configuration options.
-To have a fully blown working service, a user is expected to setup each configuration.
-However if you do not all the credentials you should still be able to run the fleet manager and interact with the public endpoints
-to test things out.
+## Allowing creation of *Standard* Dinosaur instances
 
->NOTE: See the [Makefile](../Makefile) for the environment variables accepted by each of the below commands.
+Fleet Manager is able to create two types of Dinosaur instances:
+* Eval instances
+  * Instances of this type are automatically deleted after 48 hours by default
+    > NOTE: This can be controlled by setting the `--dinosaur-lifespan` Fleet
+            Manager binary CLI flag
+  * All authenticated users that make use of the Fleet Manager can
+    request the creation of a Dinosaur eval instance
+  * There is a limit of one instance per user
+* Standard instances
+  * Instances of this type are not automatically deleted
+  * In order to be able to create an instance of this type, the user that
+    is creating it must have enough quota
 
->NOTE: You could pass dummy values to make sure that the secrets files are created.
+If you are not interested in making use of Standard Dinosaur instances you
+can skip this section. Otherwise, keep reading below.
+
+As commented above, In order o be able to create an instance of this type, the
+user must have enough quota to do it. There are currently two ways to define
+quotas for users in Fleet Manager:
+* Through a Quota Management List configuration file. This is the default
+  method used. Follow the the [Quota Management List Configurations](quota-management-list-configuration.md)
+  guide for more detail on how to configure it
+* By leveraging Red Hat's Account Management Service (AMS). For more information
+  about this method, look at the [Quota Management with Account Management Service (AMS) SKU](getting-credentials-and-accounts.md#quota-management-with-account-management-service-ams-sku)
+
+To select the type of quota to be used by Fleet Manager set the `--quota-type`
+which accepts either `ams` or `quota-management-list`Fleet Manager binary CLI
+flag. 
 
 ## Setup AWS configuration
 Fleet Manager interacts with AWS to provide the following functionalities:
