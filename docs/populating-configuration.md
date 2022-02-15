@@ -82,7 +82,7 @@ quotas for users in Fleet Manager:
 
 To select the type of quota to be used by Fleet Manager set the `--quota-type`
 which accepts either `ams` or `quota-management-list`Fleet Manager binary CLI
-flag. 
+flag.
 
 ## Setup AWS configuration
 Fleet Manager interacts with AWS to provide the following functionalities:
@@ -187,12 +187,48 @@ the previously mentioned Data Plane elements can pull container images from it:
 * Copy the contents generated from the previous point into the `secrets/image-pull.dockerconfigjson` file
 
 ## Setup the Observability stack secrets
-See [Obsevability](./observability/README.md) to learn more about Observatorium and the observability stack.
-The following command is used to setup the various secrets needed by the Observability stack.
+Fleet Manager provides the ability to provide and configure monitoring metrics
+related to the Data Planes and its Dinosaur instances. To do so it makes
+use of what's called the ([Observability Stack](./observability/README.md#observability-stack)
 
+To configure and make use of the Observability stack to offer monitoring metrics
+related to the Data Planes and its Dinosaur instances Fleet Manager needs to:
+* Access the Observability Stack's Observatorium service to retrieve and then
+  offer the metrics as one of the Fleet Manager API endpoints
+* To send the credentials/information needed to setup the Observability Stack
+  when it is installed in the Data Plane clusters
+
+In order for the Fleet Manager to be able to start, create the following files:
 ```
+	touch secrets/rhsso-logs.clientId
+	touch secrets/rhsso-logs.clientSecret
+	touch secrets/rhsso-metrics.clientId
+	touch secrets/rhsso-metrics.clientSecret
+	touch secrets/observability-config-access.token
+```
+
+If you are not interested in making use of this functionality you can skip
+this section. Otherwise, keep reading below.
+
+The following command is used to setup the various secrets needed by
+the Observability stack:
+```
+OBSERVATORIUM_CONFIG_ACCESS_TOKEN="<observatorium-config-access-token> \
+RHSSO_LOGS_CLIENT_ID=<rhsso-logs-client-id> \
+RHSSO_LOGS_CLIENT_SECRET=<rhsso-logs-client-secret> \
+RHSSO_METRICS_CLIENT_ID=<rhsso-metrics-client-id> \
+RHSSO_METRICS_CLIENT_SECRET=<rhsso-metrics-client-secret> \
 make observatorium/setup
 ```
+
+The description of the previously shown parameters are:
+* OBSERVATORIUM_CONFIG_ACCESS_TOKEN: A GitHub token corresponding to the
+  repository containing the Observability Stack configuration
+* RHSSO_LOGS_CLIENT_ID, RHSSO_LOGS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair.
+* RHSSO_METRICS_CLIENT_ID, RHSSO_METRICS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair.
+
+See [Observability](./observability/README.md) to learn more about
+Observatorium and the Observability Stack.
 
 ## Setup a custom TLS certificate for Dinosaur Host URLs
 
