@@ -222,10 +222,9 @@ make observatorium/setup
 ```
 
 The description of the previously shown parameters are:
-* OBSERVATORIUM_CONFIG_ACCESS_TOKEN: A GitHub token corresponding to the
-  repository containing the Observability Stack configuration
-* RHSSO_LOGS_CLIENT_ID, RHSSO_LOGS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair.
-* RHSSO_METRICS_CLIENT_ID, RHSSO_METRICS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair.
+* OBSERVATORIUM_CONFIG_ACCESS_TOKEN: A GitHub token required to fetch the configuration from a private git repository. More details can be found [here](https://github.com/redhat-developer/observability-operator#adding-requisite-resources). 
+* RHSSO_LOGS_CLIENT_ID, RHSSO_LOGS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair to push logs to Observatorium. Used to authenticate via `sso.redhat.com` when logging via `config.promtail.enabled` is set in the observability configuration. Provided by the Observatorium team.
+* RHSSO_METRICS_CLIENT_ID, RHSSO_METRICS_CLIENT_SECRET: An OAuth's client-id/client-secret credentials pair to push metrics to Observatorium. Used to authenticate via `sso.redhat.com` when `config.prometheus.observatorium` is set in the observability configuration. Provided by the Observatorium team.
 
 See [Observability](./observability/README.md) to learn more about
 Observatorium and the Observability Stack.
