@@ -17,12 +17,7 @@ If manual verifications required, please provide an environment where the review
 
 ## Checklist (Definition of Done)
 <!-- Please strikethrough options not relevant using two tildes ~~Text~~. Do not delete non relevant options -->
-- [ ] All acceptance criteria specified in JIRA have been completed
-- [ ] Unit and integration tests added that prove the fix is effective or the feature works (tested against emulated and non-emulated OCM environment)
 - [ ] Documentation added for the feature
-- [ ] CI and all relevant tests are passing
 - [ ] Code Review completed
 - [ ] Verified independently by reviewer
-- [ ] Required metrics/dashboards/alerts have been added (or PR created).
-- [ ] Required Standard Operating Procedure (SOP) is added.
-- [ ] JIRA has created for changes required on the client side
+- [ ] Equivalent Github Pull Request or an issue has been opened on the Quarkus based template   
