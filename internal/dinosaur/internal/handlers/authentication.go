@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/routes"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/client/keycloak"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/errors"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/server"
@@ -32,9 +31,9 @@ func NewAuthenticationBuilder(ServerConfig *server.ServerConfig, KeycloakConfig 
 			KeysURL(KeycloakConfig.OSDClusterIDPRealm.JwksEndpointURI). // sso SRE realm cert URL
 			Error(fmt.Sprint(errors.ErrorUnauthenticated)).
 			Service(errors.ERROR_CODE_PREFIX).
-			Public(fmt.Sprintf("^%s/%s/?$", routes.ApiEndpoint, routes.DinosaursFleetManagementApiPrefix)).
-			Public(fmt.Sprintf("^%s/%s/%s/?$", routes.ApiEndpoint, routes.DinosaursFleetManagementApiPrefix, routes.Version)).
-			Public(fmt.Sprintf("^%s/%s/%s/openapi/?$", routes.ApiEndpoint, routes.DinosaursFleetManagementApiPrefix, routes.Version)).
-			Public(fmt.Sprintf("^%s/%s/%s/errors/?[0-9]*", routes.ApiEndpoint, routes.DinosaursFleetManagementApiPrefix, routes.Version)),
+			Public(fmt.Sprintf("^%s/?$", ServerConfig.APIBasePath)).
+			Public(fmt.Sprintf("^%s/%s/?$", ServerConfig.APIBasePath, ServerConfig.APIVersion)).
+			Public(fmt.Sprintf("^%s/%s/openapi/?$", ServerConfig.APIBasePath, ServerConfig.APIVersion)).
+			Public(fmt.Sprintf("^%s/%s/errors/?[0-9]*", ServerConfig.APIBasePath, ServerConfig.APIVersion)),
 		nil
 }
