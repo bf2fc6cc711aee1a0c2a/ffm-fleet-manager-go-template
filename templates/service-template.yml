@@ -314,6 +314,16 @@ parameters:
   description: The public HTTP host URL of the service
   value: "https://api.openshift.com"
 
+- name: API_BASE_PATH
+  displayName: Fleet manager API base path
+  description: Fleet manager API base path
+  value: "/api/dinosaurs_mgmt"
+
+- name: API_VERSION
+  displayName: Fleet manager API version
+  description: Fleet manager API version
+  value: "v1"
+
 - name: DINOSAUR_CAPACITY_MAX_CAPACITY
   displayName: Maximum number of clusters
   description: Maximum number of allowed dinosaur clusters
@@ -738,6 +748,8 @@ objects:
             - --observability-config-tag=${OBSERVABILITY_CONFIG_TAG}
             - --image-pull-docker-config-file=/secrets/service/image-pull.dockerconfigjson
             - --public-host-url=${SERVICE_PUBLIC_HOST_URL}
+            - --api-base-path=${API_BASE_PATH}
+            - --api-version=${API_VERSION}
             - --dinosaur-operator-index-image=${DINOSAUR_OPERATOR_OLM_INDEX_IMAGE}
             - --fleetshard-operator-index-image=${FLEETSHARD_OLM_INDEX_IMAGE}
             - --dataplane-cluster-scaling-type=${DATAPLANE_CLUSTER_SCALING_TYPE}
