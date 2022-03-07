@@ -14,7 +14,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/internal/generated"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/internal/handlers"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/internal/services"
-	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/routes"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/acl"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/api"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/auth"
@@ -58,8 +57,7 @@ func NewRouteLoader(s options) environments.RouteLoader {
 }
 
 func (s *options) AddRoutes(mainRouter *mux.Router) error {
-	basePath := fmt.Sprintf("%s/%s", routes.ApiEndpoint, routes.DinosaursFleetManagementApiPrefix)
-	err := s.buildApiBaseRouter(mainRouter, basePath, "fleet-manager.yaml")
+	err := s.buildApiBaseRouter(mainRouter)
 	if err != nil {
 		return err
 	}
@@ -67,9 +65,8 @@ func (s *options) AddRoutes(mainRouter *mux.Router) error {
 	return nil
 }
 
-// TODO change /dinosaurs path param and any reference to Dinosaur to correspond to your own service Rest resource
-func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, openApiFilePath string) error {
-	openAPIDefinitions, err := shared.LoadOpenAPISpec(generated.Asset, openApiFilePath)
+func (s *options) buildApiBaseRouter(mainRouter *mux.Router) error {
+	openAPIDefinitions, err := shared.LoadOpenAPISpec(generated.Asset, "fleet-manager.yaml")
 	if err != nil {
 		return pkgerrors.Wrapf(err, "can't load OpenAPI specification")
 	}
@@ -86,21 +83,21 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 	requireTermsAcceptance := auth.NewRequireTermsAcceptanceMiddleware().RequireTermsAcceptance(s.ServerConfig.EnableTermsAcceptance, s.AMSClient, errors.ErrorTermsNotAccepted)
 
 	// base path.
-	apiRouter := mainRouter.PathPrefix(basePath).Subrouter()
+	apiRouter := mainRouter.PathPrefix(s.ServerConfig.APIBasePath).Subrouter()
 
-	// /v1
-	apiV1Router := apiRouter.PathPrefix("/v1").Subrouter()
+	// e.g /v1
+	apiVersionRouter := apiRouter.PathPrefix(fmt.Sprintf("/%s", s.ServerConfig.APIVersion)).Subrouter()
 
 	//  /openapi
-	apiV1Router.HandleFunc("/openapi", coreHandlers.NewOpenAPIHandler(openAPIDefinitions).Get).Methods(http.MethodGet)
+	apiVersionRouter.HandleFunc("/openapi", coreHandlers.NewOpenAPIHandler(openAPIDefinitions).Get).Methods(http.MethodGet)
 
 	//  /errors
-	apiV1ErrorsRouter := apiV1Router.PathPrefix("/errors").Subrouter()
+	apiV1ErrorsRouter := apiVersionRouter.PathPrefix("/errors").Subrouter()
 	apiV1ErrorsRouter.HandleFunc("", errorsHandler.List).Methods(http.MethodGet)
 	apiV1ErrorsRouter.HandleFunc("/{id}", errorsHandler.Get).Methods(http.MethodGet)
 
 	// /status
-	apiV1Status := apiV1Router.PathPrefix("/status").Subrouter()
+	apiV1Status := apiVersionRouter.PathPrefix("/status").Subrouter()
 	apiV1Status.HandleFunc("", serviceStatusHandler.Get).Methods(http.MethodGet)
 	apiV1Status.Use(requireIssuer)
 
@@ -111,7 +108,7 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 		ID:   "dinosaurs",
 		Kind: "DinosaurList",
 	})
-	apiV1DinosaursRouter := apiV1Router.PathPrefix("/dinosaurs").Subrouter()
+	apiV1DinosaursRouter := apiVersionRouter.PathPrefix("/dinosaurs").Subrouter()
 	apiV1DinosaursRouter.HandleFunc("/{id}", dinosaurHandler.Get).
 		Name(logger.NewLogEvent("get-dinosaur", "get a dinosaur instance").ToString()).
 		Methods(http.MethodGet)
@@ -144,7 +141,7 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 	// /dinosaurs/{id}/metrics/federate
 	// federate endpoint separated from the rest of the /dinosaurs endpoints as it needs to support auth from both sso.redhat.com and mas-sso
 	// NOTE: this is only a temporary solution. MAS SSO auth support should be removed once we migrate to sso.redhat.com (TODO: to be done as part of MGDSTRM-6159)
-	apiV1MetricsFederateRouter := apiV1Router.PathPrefix("/dinosaurs/{id}/metrics/federate").Subrouter()
+	apiV1MetricsFederateRouter := apiVersionRouter.PathPrefix("/dinosaurs/{id}/metrics/federate").Subrouter()
 	apiV1MetricsFederateRouter.HandleFunc("", metricsHandler.FederateMetrics).
 		Name(logger.NewLogEvent("get-federate-metrics", "get federate metrics by id").ToString()).
 		Methods(http.MethodGet)
@@ -157,7 +154,7 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 		ID:   "cloud_providers",
 		Kind: "CloudProviderList",
 	})
-	apiV1CloudProvidersRouter := apiV1Router.PathPrefix("/cloud_providers").Subrouter()
+	apiV1CloudProvidersRouter := apiVersionRouter.PathPrefix("/cloud_providers").Subrouter()
 	apiV1CloudProvidersRouter.HandleFunc("", cloudProvidersHandler.ListCloudProviders).
 		Name(logger.NewLogEvent("list-cloud-providers", "list all cloud providers").ToString()).
 		Methods(http.MethodGet)
@@ -180,12 +177,12 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 	apiRouter.Use(db.TransactionMiddleware(s.DB))
 	apiRouter.Use(gorillaHandlers.CompressHandler)
 
-	apiV1Router.HandleFunc("", v1Metadata.ServeHTTP).Methods(http.MethodGet)
+	apiVersionRouter.HandleFunc("", v1Metadata.ServeHTTP).Methods(http.MethodGet)
 
 	// /agent-clusters/{id}
 	dataPlaneClusterHandler := handlers.NewDataPlaneClusterHandler(s.DataPlaneCluster)
 	dataPlaneDinosaurHandler := handlers.NewDataPlaneDinosaurHandler(s.DataPlaneDinosaurService, s.Dinosaur)
-	apiV1DataPlaneRequestsRouter := apiV1Router.PathPrefix("/agent-clusters").Subrouter()
+	apiV1DataPlaneRequestsRouter := apiVersionRouter.PathPrefix("/agent-clusters").Subrouter()
 	apiV1DataPlaneRequestsRouter.HandleFunc("/{id}", dataPlaneClusterHandler.GetDataPlaneClusterConfig).
 		Name(logger.NewLogEvent("get-dataplane-cluster-config", "get dataplane cluster config by id").ToString()).
 		Methods(http.MethodGet)
@@ -202,7 +199,7 @@ func (s *options) buildApiBaseRouter(mainRouter *mux.Router, basePath string, op
 	auth.UseOperatorAuthorisationMiddleware(apiV1DataPlaneRequestsRouter, s.Keycloak.GetConfig().DinosaurRealm.ValidIssuerURI, "id")
 
 	adminDinosaurHandler := handlers.NewAdminDinosaurHandler(s.Dinosaur, s.AccountService, s.ProviderConfig)
-	adminRouter := apiV1Router.PathPrefix("/admin").Subrouter()
+	adminRouter := apiVersionRouter.PathPrefix("/admin").Subrouter()
 	rolesMapping := map[string][]string{
 		http.MethodGet:    {auth.FleetManagerAdminReadRole, auth.FleetManagerAdminWriteRole, auth.FleetManagerAdminFullRole},
 		http.MethodPatch:  {auth.FleetManagerAdminWriteRole, auth.FleetManagerAdminFullRole},

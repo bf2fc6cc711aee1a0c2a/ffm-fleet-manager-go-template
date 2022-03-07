@@ -17,6 +17,8 @@ type ServerConfig struct {
 	// For staging it is "https://api.stage.openshift.com"
 	// For production it is "https://api.openshift.com"
 	PublicHostURL         string `json:"public_url"`
+	APIBasePath           string `json:"base_api_path"`
+	APIVersion            string `json:"api_version"`
 	EnableTermsAcceptance bool   `json:"enable_terms_acceptance"`
 }
 
@@ -30,6 +32,8 @@ func NewServerConfig() *ServerConfig {
 		HTTPSCertFile:  "",
 		HTTPSKeyFile:   "",
 		PublicHostURL:  "http://localhost",
+		APIBasePath:    "/api/dinosaurs_mgmt",
+		APIVersion:     "v1",
 	}
 }
 
@@ -43,6 +47,8 @@ func (s *ServerConfig) AddFlags(fs *pflag.FlagSet) {
 	fs.StringVar(&s.JwksFile, "jwks-file", s.JwksFile, "File containing the the JSON web token signing certificates.")
 	fs.StringVar(&s.TokenIssuerURL, "token-issuer-url", s.TokenIssuerURL, "A token issuer URL. Used to validate if a JWT token used for public endpoints was issued from the given URL.")
 	fs.StringVar(&s.PublicHostURL, "public-host-url", s.PublicHostURL, "Public http host URL of the service")
+	fs.StringVar(&s.APIBasePath, "api-base-path", s.APIBasePath, "Base API Path where all API resources will be located")
+	fs.StringVar(&s.APIVersion, "api-version", s.APIVersion, "API version")
 }
 
 func (s *ServerConfig) ReadFiles() error {
