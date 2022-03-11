@@ -2,10 +2,11 @@ package sentry
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/environments"
 	"github.com/getsentry/sentry-go"
 	"github.com/golang/glog"
-	"os"
 )
 
 func Initialize(envName environments.EnvName, c *Config) error {
@@ -35,7 +36,6 @@ func Initialize(envName environments.EnvName, c *Config) error {
 	if err != nil && hostname != "" {
 		options.ServerName = hostname
 	}
-	// TODO figure out some way to set options.Release and options.Dist
 
 	err = sentry.Init(options)
 	if err != nil {
