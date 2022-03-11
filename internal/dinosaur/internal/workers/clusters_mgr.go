@@ -8,7 +8,6 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/internal/config"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/client/observatorium"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/client/ocm"
-	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/constants"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/logger"
 
 	"strings"
@@ -34,28 +33,18 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// TODO change these constants to match your own
 const (
-	observabilityNamespace           = "managed-application-services-observability"
-	observabilityCatalogSourceImage  = "quay.io/rhoas/observability-operator-index:v3.0.9"
-	observabilityOperatorGroupName   = "observability-operator-group-name"
-	observabilityCatalogSourceName   = "observability-operator-manifests"
-	observabilitySubscriptionName    = "observability-operator"
-	observatoriumSSOSecretName       = "observatorium-configuration-red-hat-sso"
-	observatoriumAuthType            = "redhat"
-	syncsetName                      = "ext-managedservice-cluster-mgr"
-	imagePullSecretName              = "rhoas-image-pull-secret"
-	dinosaurOperatorAddonNamespace   = constants.DinosaurOperatorNamespace
-	dinosaurOperatorQEAddonNamespace = "redhat-managed-dinosaur-operator-qe"
-	fleetshardAddonNamespace         = constants.FleetShardOperatorNamespace
-	fleetshardQEAddonNamespace       = "redhat-fleetshard-operator-qe"
-	openIDIdentityProviderName       = "Dinosaur_SRE"
-	mkReadOnlyGroupName              = "mk-readonly-access"
-	mkSREGroupName                   = "dinosaur-sre"
-	mkReadOnlyRoleBindingName        = "mk-dedicated-readers"
-	mkSRERoleBindingName             = "dinosaur-sre-cluster-admin"
-	dedicatedReadersRoleBindingName  = "dedicated-readers"
-	clusterAdminRoleName             = "cluster-admin"
+	observabilityNamespace          = "managed-application-services-observability"
+	observabilityCatalogSourceImage = "quay.io/rhoas/observability-operator-index:v3.0.9"
+	observabilityOperatorGroupName  = "observability-operator-group-name"
+	observabilityCatalogSourceName  = "observability-operator-manifests"
+	observabilitySubscriptionName   = "observability-operator"
+	observatoriumSSOSecretName      = "observatorium-configuration-red-hat-sso"
+	observatoriumAuthType           = "redhat"
+	syncsetName                     = "ext-managedservice-cluster-mgr"
+	imagePullSecretName             = "rhoas-image-pull-secret"
+	dedicatedReadersRoleBindingName = "dedicated-readers"
+	clusterAdminRoleName            = "cluster-admin"
 )
 
 var clusterMetricsStatuses = []api.ClusterStatus{
@@ -736,13 +725,13 @@ func (c *ClusterManager) buildResourceSet() types.ResourceSet {
 		c.buildObservabilityOperatorGroupResource(),
 		c.buildObservabilitySubscriptionResource(),
 	}
-	managedDinosaurOperatorNamespace := dinosaurOperatorAddonNamespace
+	managedDinosaurOperatorNamespace := dinosaurConstants.DinosaurOperatorAddonNamespace
 	if c.OCMConfig.DinosaurOperatorAddonID == "managed-dinosaur-qe" {
-		managedDinosaurOperatorNamespace = dinosaurOperatorQEAddonNamespace
+		managedDinosaurOperatorNamespace = dinosaurConstants.DinosaurOperatorQEAddonNamespace
 	}
-	fleetshardNS := fleetshardAddonNamespace
+	fleetshardNS := dinosaurConstants.FleetshardAddonNamespace
 	if c.OCMConfig.FleetshardAddonID == "fleetshard-operator-qe" {
-		fleetshardNS = fleetshardQEAddonNamespace
+		fleetshardNS = dinosaurConstants.FleetshardQEAddonNamespace
 	}
 
 	if s := c.buildImagePullSecret(managedDinosaurOperatorNamespace); s != nil {
@@ -881,7 +870,7 @@ func (c *ClusterManager) buildReadOnlyGroupResource() *userv1.Group {
 			Kind:       "Group",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: mkReadOnlyGroupName,
+			Name: dinosaurConstants.ReadOnlyGroupName,
 		},
 		Users: c.DataplaneClusterConfig.ReadOnlyUserList,
 	}
@@ -895,13 +884,13 @@ func (c *ClusterManager) buildDedicatedReaderClusterRoleBindingResource() *authv
 			Kind:       "ClusterRoleBinding",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: mkReadOnlyRoleBindingName,
+			Name: dinosaurConstants.ReadOnlyRoleBindingName,
 		},
 		Subjects: []k8sCoreV1.ObjectReference{
 			{
 				Kind:       "Group",
 				APIVersion: "rbac.authorization.k8s.io",
-				Name:       mkReadOnlyGroupName,
+				Name:       dinosaurConstants.ReadOnlyGroupName,
 			},
 		},
 		RoleRef: k8sCoreV1.ObjectReference{
@@ -920,7 +909,7 @@ func (c *ClusterManager) buildDinosaurSREGroupResource() *userv1.Group {
 			Kind:       "Group",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: mkSREGroupName,
+			Name: dinosaurConstants.SREGroupName,
 		},
 		Users: c.DataplaneClusterConfig.DinosaurSREUsers,
 	}
@@ -934,13 +923,13 @@ func (c *ClusterManager) buildDinosaurSreClusterRoleBindingResource() *authv1.Cl
 			Kind:       "ClusterRoleBinding",
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: mkSRERoleBindingName,
+			Name: dinosaurConstants.SRERoleBindingName,
 		},
 		Subjects: []k8sCoreV1.ObjectReference{
 			{
 				Kind:       "Group",
 				APIVersion: "rbac.authorization.k8s.io",
-				Name:       mkSREGroupName,
+				Name:       dinosaurConstants.SREGroupName,
 			},
 		},
 		RoleRef: k8sCoreV1.ObjectReference{
@@ -963,7 +952,7 @@ func (c *ClusterManager) reconcileClusterIdentityProvider(cluster api.Cluster) e
 		return errors.WithMessagef(dnsErr, "failed to reconcile cluster identity provider %s: %s", cluster.ClusterID, dnsErr.Error())
 	}
 
-	callbackUri := fmt.Sprintf("https://oauth-openshift.%s/oauth2callback/%s", clusterDNS, openIDIdentityProviderName)
+	callbackUri := fmt.Sprintf("https://oauth-openshift.%s/oauth2callback/%s", clusterDNS, dinosaurConstants.OpenIDIdentityProviderName)
 	clientSecret, ssoErr := c.OsdIdpKeycloakService.RegisterOSDClusterClientInSSO(cluster.ID, callbackUri)
 	if ssoErr != nil {
 		return errors.WithMessagef(ssoErr, "failed to reconcile cluster identity provider %s: %s", cluster.ClusterID, ssoErr.Error())
@@ -971,7 +960,7 @@ func (c *ClusterManager) reconcileClusterIdentityProvider(cluster api.Cluster) e
 
 	idpInfo := types.IdentityProviderInfo{
 		OpenID: &types.OpenIDIdentityProviderInfo{
-			Name:         openIDIdentityProviderName,
+			Name:         dinosaurConstants.OpenIDIdentityProviderName,
 			ClientID:     cluster.ID,
 			ClientSecret: clientSecret,
 			Issuer:       c.OsdIdpKeycloakService.GetRealmConfig().ValidIssuerURI,

@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// DinosaurRequest is an example business model for your managed service.
+// It is what holds the customer request in the database
 type DinosaurRequest struct {
 	api.Meta
 	Region         string `json:"region"`
@@ -16,7 +18,7 @@ type DinosaurRequest struct {
 	Name           string `json:"name" gorm:"index"`
 	Status         string `json:"status" gorm:"index"`
 	SubscriptionId string `json:"subscription_id"`
-	Owner          string `json:"owner" gorm:"index"` // TODO: ocm owner?
+	Owner          string `json:"owner" gorm:"index"`
 	OwnerAccountId string `json:"owner_account_id"`
 	// The DNS host (domain) of the Dinosaur service
 	Host           string `json:"host"`
