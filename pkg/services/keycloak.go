@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Nerzal/gocloak/v8"
+	"github.com/Nerzal/gocloak/v11"
 	"github.com/golang/glog"
 
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/api"
