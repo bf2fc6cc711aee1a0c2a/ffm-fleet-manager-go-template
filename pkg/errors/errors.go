@@ -2,9 +2,10 @@ package errors
 
 import (
 	"fmt"
-	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/compat"
 	"net/http"
 	"strconv"
+
+	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/compat"
 
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
@@ -316,7 +317,6 @@ func NewWithCause(code ServiceErrorCode, cause error, reason string, values ...i
 		err = &ServiceError{ErrorGeneral, "Unspecified error", http.StatusInternalServerError, nil}
 	}
 
-	// TODO - if cause is nil, should we use the reason as the cause?
 	if cause != nil {
 		_, ok := cause.(stackTracer)
 		if !ok {

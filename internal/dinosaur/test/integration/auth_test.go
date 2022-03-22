@@ -21,6 +21,7 @@ import (
 	"gopkg.in/resty.v1"
 )
 
+// TODO replace /dinosaurs with your resource name
 func TestAuth_success(t *testing.T) {
 	ocmServer := mocks.NewMockConfigurableServerBuilder().Build()
 	defer ocmServer.Close()
@@ -81,7 +82,7 @@ func TestAuthSuccess_usingSSORHToken(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(token).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).NotTo(HaveOccurred())
 	Expect(restyResp.StatusCode()).To(Equal(http.StatusOK))
 }
@@ -95,7 +96,7 @@ func TestAuthFailure_withoutToken(t *testing.T) {
 
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 	re := parseResponse(restyResp)
 	Expect(re.Code).To(Equal(fmt.Sprintf("%s-%d", errors.ERROR_CODE_PREFIX, errors.ErrorUnauthenticated)))
@@ -119,7 +120,7 @@ func TestAuthFailure_invalidTokenWithTypMissing(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(token).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 	re := parseResponse(restyResp)
 	Expect(re.Code).To(Equal(fmt.Sprintf("%s-%d", errors.ERROR_CODE_PREFIX, errors.ErrorUnauthenticated)))
@@ -142,7 +143,7 @@ func TestAuthFailure_ExpiredToken(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(token).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 	re := parseResponse(restyResp)
 	Expect(re.Code).To(Equal(fmt.Sprintf("%s-%d", errors.ERROR_CODE_PREFIX, errors.ErrorUnauthenticated)))
@@ -165,7 +166,7 @@ func TestAuthFailure_invalidTokenMissingIat(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(token).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 	re := parseResponse(restyResp)
 	Expect(re.Code).To(Equal(fmt.Sprintf("%s-%d", errors.ERROR_CODE_PREFIX, errors.ErrorUnauthenticated)))
@@ -196,7 +197,7 @@ func TestAuthFailure_invalidTokenMissingAlgHeader(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(strToken).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 
 	re := parseResponse(restyResp)
@@ -227,7 +228,7 @@ func TestAuthFailure_invalidTokenUnsigned(t *testing.T) {
 	restyResp, err := resty.R().
 		SetHeader("Content-Type", "application/json").
 		SetAuthToken(strToken).
-		Get(h.RestURL("/dinosaurs")) // TODO replace dinosaurs with your endpoint
+		Get(h.RestURL("/dinosaurs"))
 	Expect(err).To(BeNil())
 	re := parseResponse(restyResp)
 	Expect(re.Code).To(Equal(fmt.Sprintf("%s-%d", errors.ERROR_CODE_PREFIX, errors.ErrorUnauthenticated)))

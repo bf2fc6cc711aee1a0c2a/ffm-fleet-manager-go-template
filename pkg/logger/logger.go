@@ -81,7 +81,6 @@ type logger struct {
 	context   context.Context
 	level     int32
 	accountID string
-	// TODO username is unused, should we be logging it? Could be pii
 	username  string
 	session   string
 	sentryHub *sentry.Hub

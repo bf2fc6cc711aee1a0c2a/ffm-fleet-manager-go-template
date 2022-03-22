@@ -5,10 +5,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/constants"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/shared"
 	"github.com/pkg/errors"
 
+	constants "github.com/bf2fc6cc711aee1a0c2a/fleet-manager/internal/dinosaur/constants"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/api"
 	userv1 "github.com/openshift/api/user/v1"
 	"github.com/spf13/pflag"
@@ -81,14 +81,14 @@ func NewDataplaneClusterConfig() *DataplaneClusterConfig {
 		DinosaurOperatorOLMConfig: OperatorInstallationConfig{
 			IndexImage:             "quay.io/osd-addons/managed-dinosaur:production-82b42db",
 			CatalogSourceNamespace: "openshift-marketplace",
-			Namespace:              constants.DinosaurOperatorNamespace,
+			Namespace:              constants.DinosaurOperatorAddonNamespace,
 			SubscriptionChannel:    "alpha",
 			Package:                "managed-dinosaur",
 		},
 		FleetshardOperatorOLMConfig: OperatorInstallationConfig{
 			IndexImage:             "quay.io/osd-addons/fleetshard-operator:production-82b42db",
 			CatalogSourceNamespace: "openshift-marketplace",
-			Namespace:              constants.FleetShardOperatorNamespace,
+			Namespace:              constants.FleetshardAddonNamespace,
 			SubscriptionChannel:    "alpha",
 			Package:                "fleetshard-operator",
 		},

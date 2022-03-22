@@ -115,8 +115,6 @@ func (authHelper *AuthHelper) CreateJWTWithClaims(account *amv1.Account, jwtClai
 		}
 	}
 
-	// TODO: Set default claim for sso token here.
-
 	// Override default and add properties from the specified claims. Remove any key with nil value
 	for k, v := range jwtClaims {
 		if v == nil {
