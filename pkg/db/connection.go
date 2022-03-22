@@ -34,7 +34,6 @@ func NewConnectionFactory(config *DatabaseConfig) (*ConnectionFactory, func()) {
 	if config.Dialect == "postgres" {
 		db, err = gorm.Open(postgres.Open(config.ConnectionString()), gormConfig)
 	} else {
-		// TODO what other dialects do we support?
 		panic(fmt.Sprintf("Unsupported DB dialect: %s", config.Dialect))
 	}
 	if err != nil {

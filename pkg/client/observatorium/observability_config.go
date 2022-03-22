@@ -40,9 +40,9 @@ type ObservabilityConfiguration struct {
 func NewObservabilityConfigurationConfig() *ObservabilityConfiguration {
 	return &ObservabilityConfiguration{
 		Timeout:                            240 * time.Second,
-		Debug:                              true, // TODO: false
+		Debug:                              true,
 		EnableMock:                         false,
-		Insecure:                           true, // TODO: false
+		Insecure:                           true,
 		ObservabilityConfigRepo:            "https://api.github.com/repos/bf2fc6cc711aee1a0c2a/observability-resources-mk/contents",
 		ObservabilityConfigChannel:         "resources", // Pointing to resources as the individual directories for prod and staging are no longer needed
 		ObservabilityConfigAccessToken:     "",

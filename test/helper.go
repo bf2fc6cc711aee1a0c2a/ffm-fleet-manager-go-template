@@ -40,7 +40,6 @@ const (
 	jwtCAFile  = "test/support/jwt_ca.pem"
 )
 
-// TODO jwk mock server needs to be refactored out of the helper and into the testing environment
 //var jwkURL string
 
 // TimeFunc defines a way to get a new Time instance common to the entire test suite.
