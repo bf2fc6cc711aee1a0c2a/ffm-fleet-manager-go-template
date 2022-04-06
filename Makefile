@@ -228,6 +228,32 @@ help:
 setup/git/hooks:
 	git config core.hooksPath .githooks
 
+# Touch all the necessary files for fleet manager to start
+# See docs/populating-configuration.md for more info
+.PHONY: setup/secrets/empty
+setup/secrets/empty:
+	touch secrets/ocm-service.clientId
+	touch secrets/ocm-service.clientSecret
+	touch secrets/aws.accountid
+	touch secrets/aws.accesskey
+	touch secrets/aws.secretaccesskey
+	touch secrets/aws.route53accesskey
+	touch secrets/aws.route53secretaccesskey
+	touch secrets/keycloak-service.clientId
+	touch secrets/keycloak-service.clientSecret
+	touch secrets/osd-idp-keycloak-service.clientId
+	touch secrets/osd-idp-keycloak-service.clientSecret
+	touch secrets/sentry.key
+	touch secrets/rhsso-logs.clientId
+	touch secrets/rhsso-logs.clientSecret
+	touch secrets/rhsso-metrics.clientId
+	touch secrets/rhsso-metrics.clientSecret
+	touch secrets/observability-config-access.token
+	touch secrets/dinosaur-tls.crt
+	touch secrets/dinosaur-tls.key
+	touch secrets/image-pull.dockerconfigjson
+
+
 # Checks if a GOPATH is set, or emits an error message
 check-gopath:
 ifndef GOPATH
