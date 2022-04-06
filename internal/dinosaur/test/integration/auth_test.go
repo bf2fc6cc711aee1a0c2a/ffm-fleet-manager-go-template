@@ -105,6 +105,8 @@ func TestAuthFailure_withoutToken(t *testing.T) {
 }
 
 func TestAuthFailure_invalidTokenWithTypMissing(t *testing.T) {
+	skipTest(t)
+
 	ocmServer := mocks.NewMockConfigurableServerBuilder().Build()
 	defer ocmServer.Close()
 
