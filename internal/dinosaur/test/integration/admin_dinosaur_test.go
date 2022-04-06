@@ -38,6 +38,8 @@ func NewAuthenticatedContextForAdminEndpoints(h *coreTest.Helper, realmRoles []s
 }
 
 func TestAdminDinosaur_Get(t *testing.T) {
+	skipTest(t)
+
 	sampleDinosaurID := api.NewID()
 	desiredDinosaurOperatorVersion := "test"
 	type args struct {

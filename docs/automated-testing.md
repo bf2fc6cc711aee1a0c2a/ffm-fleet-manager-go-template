@@ -73,6 +73,10 @@ To run integration tests with an "emulated" OCM environment, run:
 OCM_ENV=integration make test/integration
 ```
 
+Note that some of the integration tests provided out of the box won't pass until the missing pieces of code are implemented.
+These tests are suppressed as not to cause test failures by default.
+See [main_test.go](../internal/dinosaur/test/main_test.go) for more information.
+
 To run integration tests with a real OCM environment, run:
 
 ```

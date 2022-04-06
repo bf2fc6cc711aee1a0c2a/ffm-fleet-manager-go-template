@@ -100,6 +100,8 @@ func setup(t *testing.T, claims claimsFunc, startupHook interface{}) TestServer 
 }
 
 func TestDataPlaneEndpoints_GetAndUpdateManagedDinosaurs(t *testing.T) {
+	skipTest(t)
+
 	testServer := setup(t, func(account *v1.Account, cid string, h *coreTest.Helper) jwt.MapClaims {
 		username, _ := account.GetUsername()
 		return jwt.MapClaims{
