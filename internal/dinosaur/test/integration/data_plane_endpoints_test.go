@@ -44,10 +44,13 @@ type TestServer struct {
 	Ctx           context.Context
 }
 
+//nolint
 type claimsFunc func(account *v1.Account, clusterId string, h *coreTest.Helper) jwt.MapClaims
 
+//nolint
 var clusterId = api.NewID()
 
+//nolint
 func setup(t *testing.T, claims claimsFunc, startupHook interface{}) TestServer {
 
 	ocmServer := mocks.NewMockConfigurableServerBuilder().Build()
@@ -100,6 +103,8 @@ func setup(t *testing.T, claims claimsFunc, startupHook interface{}) TestServer 
 }
 
 func TestDataPlaneEndpoints_GetAndUpdateManagedDinosaurs(t *testing.T) {
+	skipTest(t)
+
 	testServer := setup(t, func(account *v1.Account, cid string, h *coreTest.Helper) jwt.MapClaims {
 		username, _ := account.GetUsername()
 		return jwt.MapClaims{
@@ -341,6 +346,7 @@ func TestDataPlaneEndpoints_GetAndUpdateManagedDinosaurs(t *testing.T) {
 	}
 }
 
+//nolint
 func findManagedDinosaurByID(slice []private.ManagedDinosaur, dinosaurId string) *private.ManagedDinosaur {
 	match := func(item private.ManagedDinosaur) bool { return item.Metadata.Annotations.MasId == dinosaurId }
 	for _, item := range slice {
