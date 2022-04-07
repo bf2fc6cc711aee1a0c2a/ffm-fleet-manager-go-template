@@ -5,7 +5,17 @@
 The document describes how to prepare Fleet Manager to be able to start by
 populating its configurations.
 
-Follow all subsections to get a bootable Fleet Manager server.
+For convenience, the
+
+```
+make setup/secrets/empty
+```
+
+target is provided.
+This target initializes empty files that are necessary for the service to boot.
+It can be used to quickly get the service running locally.
+
+Follow the subsections to find information about how to configure these files properly.
 
 ## Interacting with the Fleet Manager API
 
