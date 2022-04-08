@@ -1,5 +1,13 @@
 # Contributing
 
+
+## Legal
+
+All original contributions to ffm-fleet-manager-go-template are licensed under the
+[AL 2.0 - Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0),
+or later, or, if another license is specified as governing the file
+or directory being modified, such other license.
+
 ## Templates update
 
 Every team using the template has shared responsibility and code access to this repository.
