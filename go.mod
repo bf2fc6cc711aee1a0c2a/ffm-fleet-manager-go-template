@@ -3,7 +3,6 @@ module github.com/bf2fc6cc711aee1a0c2a/fleet-manager
 go 1.16
 
 require (
-	github.com/Masterminds/squirrel v1.1.0
 	github.com/Nerzal/gocloak/v11 v11.0.2
 	github.com/antihax/optional v1.0.0
 	github.com/auth0/go-jwt-middleware v0.0.0-20190805220309-36081240882b
@@ -44,7 +43,6 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spyzhov/ajson v0.4.2
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/yaacov/tree-search-language v0.0.0-20190923184055-1c2dad2e354b
 	github.com/zgalor/weberr v0.6.0
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
