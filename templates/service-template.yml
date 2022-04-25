@@ -391,6 +391,36 @@ parameters:
   description: A token issuer url used to validate if JWT token used are coming from the given issuer
   value: "https://sso.redhat.com/auth/realms/redhat-external"
 
+- name: TENANT_USERNAME_CLAIM
+  displayName: Token claims username key
+  description: Token claims key to retrieve the corresponding user principal.
+  value: "username" 
+
+- name: TENANT_ID_CLAIM
+  displayName: Token claims organisation ID key
+  description: Token claims key to retrieve the corresponding organisation ID.
+  value: "org_id" 
+
+- name: TENANT_ORG_ADMIN_CLAIM
+  displayName: Token claims organisation admin access key
+  description: Token claims key to retrieve the corresponding organisation admin role.
+  value: "is_org_admin" 
+
+- name: ALTERNATE_TENANT_USERNAME_CLAIM
+  displayName: Token claims alternative username key
+  description: Token claims key to retrieve the corresponding user principal using an alternative claim.
+  value: "preferred_username" 
+
+- name: TENANT_USER_ID_CLAIM
+  displayName: Token claims Account ID key
+  description: Token claims key to retrieve the corresponding Account ID.
+  value: "account_id" 
+
+- name: ALTERNATE_TENANT_ID_CLAIM
+  displayName: Token claims alternative organisation ID key.
+  description: Token claims key to retrieve the corresponding organisation ID using an alternative claim.
+  value: "rh-org-id" 
+
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -756,6 +786,12 @@ objects:
             - --dinosaur-domain-name=${DINOSAUR_DOMAIN_NAME}
             - --dinosaur-operator-addon-id=${DINOSAUR_OPERATOR_OPERATOR_ADDON_ID}
             - --fleetshard-addon-id=${FLEETSHARD_ADDON_ID}
+            - --tenant-username-claim=${TENANT_USERNAME_CLAIM}
+            - --tenant-id-claim=${TENANT_ID_CLAIM}
+            - --tenant-org-admin-claim=${TENANT_ORG_ADMIN_CLAIM}
+            - --alternate-tenant-username-claim=${ALTERNATE_TENANT_USERNAME_CLAIM}
+            - --tenant-user-id-claim=${TENANT_USER_ID_CLAIM}
+            - --alternate-tenant-id-claim=${ALTERNATE_TENANT_ID_CLAIM}
             - --alsologtostderr
             - -v=${GLOG_V}
             resources:

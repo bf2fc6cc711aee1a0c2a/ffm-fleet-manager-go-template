@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/errors"
+	"github.com/bf2fc6cc711aee1a0c2a/kas-fleet-manager/pkg/shared/utils/arrays"
+
 	"strings"
 )
 
@@ -47,13 +49,11 @@ func MaxLen(min int) ValidateOption {
 
 func IsOneOf(options ...string) ValidateOption {
 	return func(field string, value *string) *errors.ServiceError {
-		if value != nil {
-			for _, option := range options {
-				if *value == option {
-					return nil
-				}
-			}
+		if value != nil &&
+			arrays.FindFirstString(options, func(option string) bool { return *value == option }) != -1 {
+			return nil
 		}
+
 		return errors.MinimumFieldLengthNotReached("%s is not valid. Must be one of: %s", field, strings.Join(options, ", "))
 	}
 }
