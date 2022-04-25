@@ -89,13 +89,13 @@ make db/teardown
 ```
 
 ### Adding new tests
-Before every integration test, `RegisterIntegration()` must be invoked. This will ensure that the
+Before every integration test, `NewDinosaurHelperWithHooks()` must be invoked. This will ensure that the
 API server and background workers are running and that the database has been reset to a clean
-state. `RegisterIntegration()` also returns a teardown function that should be invoked at the end
+state. `NewDinosaurHelperWithHooks()` also returns a teardown function that should be invoked at the end
 of the test. This will stop the API server and background workers. For example:
 
 ```go
-helper, httpClient, teardown := test.RegisterIntegration(t, mockOCMServer)
+helper, httpClient, teardown := test.NewDinosaurHelperWithHooks(t, mockOCMServer)
 defer teardown()
 ```
 
@@ -210,7 +210,7 @@ func MyTestFunction(t *testing.T) {
     ocmServer := mocks.NewMockConfigurableServerBuilder().Build()
 	  defer ocmServer.Close()
 
-    h, _, teardown := test.RegisterIntegration(t, ocmServer)
+    h, _, teardown := test.NewDinosaurHelperWithHooks(t, ocmServer)
   	defer teardown()
 
     mockFleetshardSyncBuilder := fleetshardsync.NewMockFleetshardSyncBuilder(h, t)
