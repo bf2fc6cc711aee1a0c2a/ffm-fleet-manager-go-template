@@ -144,6 +144,7 @@ func (h dinosaurHandler) Update(w http.ResponseWriter, r *http.Request) {
 		MarshalInto: &dinosaurUpdateReq,
 		Validate: []handlers.Validate{
 			validateDinosaurFound(),
+			ValidateDinosaurOwnership(ctx, dinosaurRequest),
 		},
 		Action: func() (i interface{}, serviceError *errors.ServiceError) {
 			// TODO implement update logic
