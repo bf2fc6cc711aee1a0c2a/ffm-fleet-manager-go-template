@@ -104,3 +104,23 @@ func ValidateDinosaurClaims(ctx context.Context, dinosaurRequestPayload *public.
 		return nil
 	}
 }
+
+func ValidateDinosaurOwnership(ctx context.Context, dinosaur *dbapi.DinosaurRequest) handlers.Validate {
+	return func() *errors.ServiceError {
+		claims, claimsErr := auth.GetClaimsFromContext(ctx)
+		if claimsErr != nil {
+			return errors.NewWithCause(errors.ErrorUnauthenticated, claimsErr, "User not authenticated")
+		}
+
+		username := auth.GetUsernameFromClaims(claims)
+		orgId := auth.GetOrgIdFromClaims(claims)
+		isOrgAdmin := auth.GetIsOrgAdminFromClaims(claims)
+		// only Dinosaur owner or organisation admin is allowed to perform the action
+		isOwner := (isOrgAdmin || dinosaur.Owner == username) && dinosaur.OrganisationId == orgId
+		if !isOwner {
+			return errors.New(errors.ErrorUnauthorized, "User not authorized to perform this action")
+		}
+
+		return nil
+	}
+}
