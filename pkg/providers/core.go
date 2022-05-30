@@ -19,6 +19,7 @@ import (
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/services/authorization"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/services/sentry"
 	"github.com/bf2fc6cc711aee1a0c2a/fleet-manager/pkg/workers"
+	"github.com/bf2fc6cc711aee1a0c2a/kas-fleet-manager/pkg/auth"
 	"github.com/goava/di"
 )
 
@@ -37,7 +38,7 @@ func CoreConfigProviders() di.Option {
 		di.Provide(acl.NewAccessControlListConfig, di.As(new(environments.ConfigModule))),
 		di.Provide(quota_management.NewQuotaManagementListConfig, di.As(new(environments.ConfigModule))),
 		di.Provide(server.NewMetricsConfig, di.As(new(environments.ConfigModule))),
-
+		di.Provide(auth.NewContextConfig, di.As(new(environments.ConfigModule))),
 		// Add common CLI sub commands
 		di.Provide(serve.NewServeCommand),
 		di.Provide(migrate.NewMigrateCommand),
