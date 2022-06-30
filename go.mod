@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/Nerzal/gocloak/v11 v11.0.1
 	github.com/antihax/optional v1.0.0
-	github.com/auth0/go-jwt-middleware v0.0.0-20190805220309-36081240882b
 	github.com/aws/aws-sdk-go v1.36.5
 	github.com/blang/semver/v4 v4.0.0
 	github.com/bxcodec/faker/v3 v3.2.0
@@ -57,7 +56,6 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/docker/distribution v2.8.1+incompatible // indirect
 	github.com/go-logr/logr v0.4.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
