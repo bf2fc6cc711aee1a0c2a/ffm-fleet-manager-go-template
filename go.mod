@@ -40,7 +40,6 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spyzhov/ajson v0.4.2
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zgalor/weberr v0.6.0
 	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 	gopkg.in/resty.v1 v1.12.0
 	gopkg.in/yaml.v2 v2.4.0
@@ -59,7 +58,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
-	github.com/docker/distribution v2.7.1+incompatible // indirect
+	github.com/docker/distribution v2.8.1+incompatible // indirect
 	github.com/go-logr/logr v0.4.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
