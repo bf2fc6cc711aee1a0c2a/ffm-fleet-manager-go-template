@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	errors "github.com/zgalor/weberr"
+	errors "github.com/pkg/errors"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -152,7 +152,7 @@ func (client *awsClient) ChangeResourceRecordSets(dnsName string, recordChangeBa
 func wrapAWSError(err error, msg string) error {
 	switch err.(type) {
 	case awserr.RequestFailure:
-		return errors.BadRequest.UserWrapf(err, msg)
+		return errors.Wrapf(err, msg)
 	default:
 		return err
 	}
