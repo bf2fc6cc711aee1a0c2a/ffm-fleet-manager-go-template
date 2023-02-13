@@ -20,7 +20,7 @@ For automation (fleet-manager deployments and app-interface pipelines) it is req
 
 # AWS
 AWS accounts are required for provisioning development OSD clusters and to access AWS Route53 for Domain Name System. To request a AWS accounts, have a chat with your team's manager.  
-> NOTE, if you are in the Middleware, make sure to send an email to `mw-billing-leaders@redhat.com` request the account to be created. The email should follow the below format:
+> NOTE, if you are in the Middleware, make sure to send an email to the appropriate people in middleware to request the account to be created. The email should follow the below format:
 ```
 *Request Type*
 New AWS account
@@ -32,6 +32,8 @@ New AWS account
 *Why?*
 <The reason for requesting the account> 
 ```
+> NOTE: If you are in middleware and you are not aware of a point of contact for the previous mail contact the creators of this template (information in the main README of this repository).
+
 > NOTE
 Within the AWS account used to provision OSD clusters, you must create an osdCcsAdmin IAM user with the following requirements:
 - This user needs at least Programmatic access enabled.
